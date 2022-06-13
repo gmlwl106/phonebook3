@@ -27,12 +27,14 @@
 				<td>${personVo.company }</td>
 			</tr>
 			<tr>
-				<td>[수정]</td>
-				<td>[삭제]</td>
+				<td><a href="modifyForm/${personVo.personId }">[수정]</a></td>
+				<td><a href="delete/${personVo.personId }">[삭제]</a></td>
 			</tr>
 		</table>
 		<br>
 	</c:forEach>
+	
+	<a href="writeForm">추가번호 등록</a>
 	
 
 </body>

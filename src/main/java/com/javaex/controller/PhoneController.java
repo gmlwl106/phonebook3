@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,57 @@ public class PhoneController {
 	//메소드 gs
 	
 	//메소드 일반
+	
+	//전화번호 수정
+	@RequestMapping(value="/modify", method= {RequestMethod.GET, RequestMethod.POST})
+	public String modify(@ModelAttribute PersonVo personVo) {
+		System.out.println("PhoneController->modify()");
+		
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personUpdate(personVo);
+		
+		return "redirect:/list";
+	}
+	
+	//전화번호 수정폼
+	// 파라미터 여러개 일때 /modifyForm/{personId}/{name}
+	//						@PathVariable("personId") int personId, @PathVariable("name") String name
+	@RequestMapping(value="/modifyForm/{personId}", method= {RequestMethod.GET, RequestMethod.POST})
+	public String modifyForm(@PathVariable("personId") int personId, Model model) {
+		System.out.println("PhoneController->modifyForm()");
+		
+		//Dao를 이용해서 personVo를 찾아옴
+		PhoneDao phoneDao = new PhoneDao();
+		PersonVo personVo = phoneDao.getPerson(personId);
+		
+		model.addAttribute("personVo", personVo);
+		
+		return "/WEB-INF/views/modifyForm.jsp";
+	}
+	
+	//전화번호 삭제
+	@RequestMapping(value="/delete/{personId}", method= {RequestMethod.GET, RequestMethod.POST})
+	public String delete(@PathVariable("personId") int personId) {
+		System.out.println("PhoneController->delete()");
+		
+		//Dao를 이용해서 삭제
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personDelete(personId);
+		
+		return "redirect:/list";
+	}
+	/*
+	@RequestMapping(value="/delete", method= {RequestMethod.GET, RequestMethod.POST})
+	public String delete(@RequestParam("personId") int personId) {
+		System.out.println("PhoneController->delete()");
+		
+		//Dao를 이용해서 삭제
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personDelete(personId);
+		
+		return "redirect:/list";
+	}
+	*/
 	
 	//전화번호 리스트
 	@RequestMapping(value="/list", method= {RequestMethod.GET, RequestMethod.POST})
